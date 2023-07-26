@@ -4,7 +4,6 @@ This is a command interpreter for our airbnb clone
 """
 import cmd
 from models import storage
-from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -141,7 +140,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing")
 
         try:
-            global()[className]
+            globals()[className]
         except KeyError:
             print("class doesn't exist")
 

@@ -35,10 +35,20 @@ class FileStorage:
             with open(self.__file_path, mode = "r", encoding = "utf-8")\
                  as file:
                 data = json.load(file)
-                for key, obj_dict in data.items():
-                    class_name, obj_id = key.split(".")
-                    module = \
-                        __import__("models.base_model", fromlist=[class_name])
-                    cls = getattr(module, class_name)
-                    obj = cls(**obj_dict)
-                    self.__objects[key] = obj
+                class_to_model = {
+                    "BaseModel": "base_model",
+                    "User": "user",
+                    "State": "state",
+                    "City": "city",
+                    "Amenity": "amenity",
+                    "Place": "place",
+                    "Review": "review",
+                }
+                for key, value in data.items():
+                    classname, obj = key.split('.')
+                    model = class_to_model[classname]
+                    module = __import__(
+                        f'models.{model}',  fromlist=[classname])
+                    cls = getattr(module, classname)
+                    obj_dict = cls(**value)
+                    self.__objects[key] = obj_dict
